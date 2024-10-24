@@ -242,12 +242,6 @@ rules:
   - '*'
 - apiGroups:
   - goharbor.io
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - goharbor.io
   resources:
   - cores
   - exporters
@@ -282,12 +276,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - goharbor.io
-  verbs:
-  - get
-  - patch
-  - update
 - apiGroups:
   - goharbor.io
   resources:
@@ -484,30 +472,6 @@ rules:
   - goharbor.io
   resources:
   - jobservices/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - goharbor.io
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - goharbor.io
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - goharbor.io
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - goharbor.io
   verbs:
   - get
   - patch
