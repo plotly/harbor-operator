@@ -23,6 +23,7 @@ func init() { //nolint:gochecknoinits
 		"~2.6.x",
 		"~2.10.x",
 		"~2.11.x",
+		"~2.12.x",
 	)
 }
 
