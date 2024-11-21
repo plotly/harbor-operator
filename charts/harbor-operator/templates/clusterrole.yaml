@@ -243,20 +243,9 @@ rules:
 - apiGroups:
   - goharbor.io
   resources:
-  - chartmuseums
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - goharbor.io
-  resources:
-  - chartmuseums
   - cores
   - exporters
   - jobservices
-  - notaryservers
-  - notarysigners
   - portals
   - registries
   - registrycontrollers
@@ -272,12 +261,9 @@ rules:
 - apiGroups:
   - goharbor.io
   resources:
-  - chartmuseums/finalizers
   - cores/finalizers
   - exporters/finalizers
   - jobservices/finalizers
-  - notaryservers/finalizers
-  - notarysigners/finalizers
   - portals/finalizers
   - registries/finalizers
   - registrycontrollers/finalizers
@@ -290,14 +276,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - goharbor.io
-  resources:
-  - chartmuseums/status
-  verbs:
-  - get
-  - patch
-  - update
 - apiGroups:
   - goharbor.io
   resources:
@@ -494,38 +472,6 @@ rules:
   - goharbor.io
   resources:
   - jobservices/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - goharbor.io
-  resources:
-  - notaryservers
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - goharbor.io
-  resources:
-  - notaryservers/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - goharbor.io
-  resources:
-  - notarysigners
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - goharbor.io
-  resources:
-  - notarysigners/status
   verbs:
   - get
   - patch
