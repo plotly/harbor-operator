@@ -13,7 +13,7 @@ require (
 	github.com/go-openapi/runtime v0.26.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/goharbor/go-client v0.26.2
-	github.com/goharbor/harbor/src v0.0.0-20220526154154-b0506782b47d
+	github.com/goharbor/harbor/src v0.0.0-20220630175814-b4ef1dbfd581
 	github.com/jaegertracing/jaeger-lib v2.2.0+incompatible
 	github.com/jetstack/cert-manager v1.1.0
 	github.com/markbates/pkger v0.17.1
@@ -97,7 +97,7 @@ require (
 	github.com/jackc/pgconn v1.9.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgproto3/v2 v2.1.1 // indirect
+	github.com/jackc/pgproto3/v2 v2.3.3 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -124,6 +124,7 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
+	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	go.mongodb.org/mongo-driver v1.14.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.45.0 // indirect
