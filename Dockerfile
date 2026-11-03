@@ -1,4 +1,5 @@
-FROM golang:1.18.3 as build
+# go.mod needs Go 1.23. Go 1.27.3 also fixes CVE-2026-111943 in crypto/x509.
+FROM golang:1.27.3 AS build
 WORKDIR /workspace
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$(go env GOARCH) go build -o manager main.go
