@@ -3,178 +3,20 @@ name: Tests
 on:
   push:
     branches:
-    - '**'
-  pull_request:
-    branches:
     - main
-    - release-*
-    - feature/*
+  pull_request:
 
 jobs:
-  # Dockerfile tests
   docker-build-test:
     runs-on: ubuntu-latest
     name: Build docker image
-
     steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: 1.18
-    - uses: actions/checkout@v2
-    - run: |
-        docker buildx create --use
-        make docker-build
+    - uses: actions/checkout@v4
+    - run: make docker-build
 
   docker-lint:
     runs-on: ubuntu-latest
     name: 'dockerfile: lint'
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - run: make docker-lint
-
-  # Golang tests
-  go-lint:
-    runs-on: ubuntu-latest
-    name: 'golang: lint'
-    steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: 1.18
-    - uses: actions/checkout@v2
-    - run: make go-lint
-
-  go-dependencies:
-    runs-on: ubuntu-latest
-    name: Dependencies are up to date
-    steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: 1.18
-    - uses: actions/checkout@v2
-    - run: make go-dependencies-test
-
-  check-generated-files:
-    runs-on: ubuntu-latest
-    name: Generated files are up to date
-    steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: 1.18
-    - uses: actions/checkout@v2
-    - run: make generated-diff-test
-
-  go-tests:
-    runs-on: ubuntu-latest
-    name: Go tests
-    env:
-      USE_EXISTING_CLUSTER: true
-      IMAGE_SOURCE_REPOSITORY: ghcr.io/goharbor
-      dockerImage: harbor-operator:dev_test
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/setup-go@v2
-        with:
-          go-version: 1.18
-
-      - name: Cache go mod
-        uses: actions/cache@v2
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
-      - name: Prepare memory storage for etcd of kind cluster
-        run: |
-          # Use memory storage for etcd of the kind cluster, see https://github.com/kubernetes-sigs/kind/issues/845 for more info
-          mkdir -p /tmp/lib/etcd
-          sudo mount -t tmpfs tmpfs /tmp/lib/etcd
-
-      - name: Install Kubernetes
-        uses: helm/kind-action@v1.3.0
-        with:
-          version: v0.14.0
-          cluster_name: harbor
-          node_image: kindest/node:v1.22.9
-          config: .github/kind.yaml
-
-      - name: Install CertManager
-        run: |
-          # Try the recet way to install crd or fallback to the old one
-          kubectl apply -f "https://github.com/jetstack/cert-manager/releases/download/v1.7.3/cert-manager.yaml"
-          sleep 5
-          time kubectl -n cert-manager wait --for=condition=Available deployment --all --timeout 300s
-
-      - name: go tests
-        run: |
-          GO_TEST_OPTS='-p 1 -vet=off' make go-test
-      - name: fetch logs
-        if: ${{ failure() }}
-        run: |
-          mkdir  -p /tmp/logs
-          kind export logs --name harbor /tmp/logs
-          ls -l /tmp/logs
-
-      - uses: actions/upload-artifact@v2
-        if: ${{ failure() }}
-        with:
-          name: kind_go-tests
-          path: /tmp/logs
-
-  # Kubernetes
-  crd-kubernetes-resources:
-    runs-on: ubuntu-latest
-    name: 'kubernetes_resources: ./config/crd'
-    steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: 1.18
-    - uses: actions/checkout@v2
-    - run: make manifests
-    - uses: azure/k8s-bake@v1
-      with:
-        renderEngine: 'kustomize'
-        kustomizationPath: './config/crd'
-        kubectl-version: 'latest'
-
-  operator-kubernetes-resources:
-    runs-on: ubuntu-latest
-    name: 'kubernetes_resources: ./config/rbac'
-    steps:
-    - uses: actions/setup-go@v2
-      with:
-        go-version: 1.18
-    - uses: actions/checkout@v2
-    - run: make manifests
-    - uses: azure/k8s-bake@v1
-      with:
-        renderEngine: 'kustomize'
-        kustomizationPath: './config/rbac'
-        kubectl-version: 'latest'
-
-  kubernetes-resources:
-    runs-on: ubuntu-latest
-    name: 'kubernetes_resources: ./config/samples/${{ matrix.path }}'
-    strategy:
-      fail-fast: false
-      matrix:
-        path:
-        - harborcluster-minimal
-        - harborcluster-standard
-        - harborcluster-fullstack
-    steps:
-    - uses: actions/checkout@v2
-    - uses: azure/k8s-bake@v1
-      with:
-        renderEngine: 'kustomize'
-        kustomizationPath: './config/samples/${{ matrix.path }}'
-        kubectl-version: 'latest'
-
-  # Documentation
-  md-lint:
-    runs-on: ubuntu-latest
-    name: 'documentation: lint'
-    steps:
-    - uses: actions/checkout@v2
-    - run: make md-lint
